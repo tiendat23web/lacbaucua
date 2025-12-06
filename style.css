@@ -1,453 +1,428 @@
 * {
-	margin: 0;
-	padding: 0;
-	box-sizing: border-box;
-	user-select: none;
-	outline: none;
-	-webkit-tap-highlight-color: transparent; /* Bỏ highlight khi chạm trên mobile */
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    user-select: none;
+    outline: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 body {
-	overflow-x: hidden;
-	font-family: "Arial", sans-serif;
-	font-weight: bold;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-	min-height: 100vh;
-	padding-bottom: 20px;
+    overflow-x: hidden;
+    font-family: "Arial", sans-serif;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #fff;
 }
 
 /* --- HEADER --- */
 header {
-	background-color: #d32f2f;
-	color: white;
-	width: 100%;
-	padding: 15px;
-	box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+    background-color: red;
+    color: white;
+    width: 100%;
+    padding: 15px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.header-logo {
+    position: absolute;
+    left: 10px;
+    top: 10px;
+}
+
+.header-logo img {
+    width: 80px;
+    height: 80px;
+    object-fit: contain;
 }
 
 .header-content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	max-width: 800px;
-	gap: 20px;
+    text-align: center;
+    margin-top: 10px;
 }
 
-.logo-img {
-	width: clamp(60px, 15vw, 100px);
-	height: clamp(60px, 15vw, 100px);
-	border-radius: 50%;
-	border: 3px solid #FFD700;
+.header-content h1 {
+    text-transform: uppercase;
+    font-size: 2rem;
+    margin: 5px 0;
 }
 
-.header-text {
-	text-align: left;
+.header-content p {
+    font-size: 1.5rem;
+    margin: 5px 0;
 }
 
-header h1 {
-	text-transform: uppercase;
-	font-size: clamp(20px, 5vw, 36px);
-	margin: 5px 0;
-	color: #fff;
-	text-shadow: 2px 2px 0px #000;
+.sub-title, .admin-name {
+    font-size: 1rem;
+    font-weight: normal;
 }
 
-header h2, header h3 {
-	font-size: clamp(12px, 3.5vw, 18px);
-	margin: 2px 0;
-	opacity: 0.9;
-}
-
-header p {
-	font-size: clamp(16px, 4.5vw, 24px);
-	color: #FFD700;
-	margin-top: 5px;
-	font-family: monospace;
-	background: rgba(0,0,0,0.3);
-	padding: 5px 10px;
-	border-radius: 5px;
-	display: inline-block;
+#FunctionBTN {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
 }
 
 /* --- BUTTONS --- */
-#FunctionBTN {
-	display: flex;
-	gap: 10px;
-	margin-top: 15px;
-	flex-wrap: wrap;
-	justify-content: center;
+.detailBet, .resetMoney {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    font-weight: bold;
+    color: white;
 }
 
-button {
-	font-family: inherit;
-	transition: transform 0.1s;
+.detailBet {
+    background-color: #03BD9C;
+    box-shadow: 0 0 5px #5CB65C, 0 0 10px yellow;
 }
 
-button:active {
-	transform: scale(0.95);
+.resetMoney {
+    background-color: gold;
+    color: red;
+    box-shadow: 0 0 5px orange, 0 0 10px yellow;
 }
 
-.detailBet, .resetMoney, .shopBtn {
-	padding: 8px 16px;
-	border: none;
-	border-radius: 8px;
-	font-size: clamp(13px, 3vw, 16px);
-	cursor: pointer;
-	font-weight: bold;
-	color: white;
-	box-shadow: 0 4px 0 rgba(0,0,0,0.2);
-}
-
-.detailBet { background-color: #009688; }
-.resetMoney { background-color: #ffca28; color: #d32f2f; }
-.shopBtn { background: linear-gradient(135deg, #4facfe, #00f2fe); }
-
-/* --- MENU MOBILE --- */
-#more {
-	position: absolute;
-	top: 10px;
-	right: 10px;
-	background: none;
-	border: none;
-	color: white;
-	font-size: 32px;
-	cursor: pointer;
-	display: none;
-	z-index: 100;
-}
-
+/* --- MOBILE MENU --- */
 #FunctionBTN_mb {
-	display: none;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	position: fixed;
-	inset: 0;
-	background: rgba(0,0,0,0.9);
-	z-index: 2000;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    left: 0;
+    top: 0;
+    background-color: rgba(0, 0, 0, 0.9);
+    width: 100vw;
+    height: 100vh;
+    z-index: 999;
 }
 
 .mb-btn {
-	width: 80%;
-	padding: 15px;
-	margin: 10px 0;
-	font-size: 18px;
+    width: 80%;
+    margin: 15px 0;
+    padding: 15px;
+    font-size: 1.2rem;
 }
 
 #closeFN_mb {
-	position: absolute;
-	top: 20px;
-	right: 20px;
-	font-size: 40px;
-	background: none;
-	border: none;
-	color: white;
-	cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    font-size: 36px;
+    background-color: transparent;
+    color: white;
+    border: none;
+    cursor: pointer;
 }
 
-/* --- GAME AREA --- */
-.main-game-area {
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	width: 100%;
-	margin-top: 20px;
-	gap: 10px;
+#more {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-color: transparent;
+    border: none;
+    color: white;
+    font-size: 35px;
+    cursor: pointer;
+    display: none; /* Hiện trên mobile sau */
+    z-index: 50;
 }
 
-.decor-cat {
-	width: clamp(80px, 20vw, 150px);
-	height: auto;
-}
-
+/* --- SÀN ĐẤU (GRID LAYOUT) --- */
 #SanDau {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 8px;
-	padding: 10px;
-	background: rgba(255,255,255,0.2);
-	border: 3px solid #d32f2f;
-	border-radius: 15px;
-	max-width: 500px;
-	width: 95vw;
+    margin-top: 20px;
+    border: 2px solid red;
+    border-radius: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); /* 3 cột đều nhau */
+    gap: 10px;
+    padding: 10px;
+    width: 95%;
+    max-width: 800px;
+    background: #fff;
 }
 
 .ChooseBC {
-	position: relative;
-	width: 100%;
-	aspect-ratio: 1;
-	background: #fff;
-	border-radius: 10px;
-	cursor: pointer;
-	border: 2px solid transparent;
-	overflow: hidden;
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1; /* Giữ hình vuông */
+    cursor: pointer;
+    border: 1px solid red;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+.ChooseBC .BauCuaChoose {
+    width: 90%;
+    height: 90%;
+    object-fit: contain;
 }
 
 .ChooseBC:active {
-	border-color: #FFD700;
-	background: #fff8e1;
+    background-color: rgba(220, 20, 60, 0.2);
 }
 
-.BauCuaChoose {
-	width: 100%;
-	height: 100%;
-	object-fit: contain;
-	padding: 2px;
-}
-
-/* Chips logic */
 .chipBet {
-	position: absolute;
-	width: 30%;
-	top: var(--randomIndexT);
-	left: var(--randomIndexL);
-	pointer-events: none;
-	filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+    position: absolute;
+    width: 40px;
+    top: var(--randomIndexT);
+    left: var(--randomIndexL);
+    pointer-events: none;
 }
 
-/* --- MONEY CHIPS BAR --- */
-#Money {
-	display: grid;
-	grid-template-columns: repeat(6, 1fr);
-	gap: 8px;
-	padding: 10px;
-	background: rgba(0,0,0,0.2);
-	border-radius: 15px;
-	margin: 10px auto;
-	width: 95vw;
-	max-width: 600px;
+/* --- TRANG TRÍ (MÈO) --- */
+.deco-cat {
+    position: fixed;
+    bottom: 0;
+    width: 150px;
+    height: auto;
+    z-index: -1;
+    opacity: 0.8;
 }
 
-.ChipsCoin {
-	width: 100%;
-	cursor: pointer;
-	border-radius: 50%;
-	border: 2px solid transparent;
-	transition: transform 0.2s;
+.cat-left {
+    left: 20px;
 }
 
-.ChipsActive {
-	border-color: #FFD700;
-	transform: scale(1.15);
-	box-shadow: 0 0 10px #FFD700;
+.cat-right {
+    right: 20px;
 }
 
-/* --- SHAKE BUTTON --- */
-#submit {
-	width: 80%;
-	max-width: 300px;
-	background: #d32f2f;
-	color: white;
-	font-size: 20px;
-	padding: 12px;
-	border: none;
-	border-radius: 30px;
-	box-shadow: 0 6px #b71c1c;
-	margin: 10px 0;
-	cursor: pointer;
-}
-
-#submit:active {
-	box-shadow: 0 2px #b71c1c;
-	transform: translateY(4px);
-}
-
-/* --- SHAKING ANIMATION OVERLAY --- */
+/* --- XÓC ĐĨA --- */
 #PlateLidPlace {
-	position: fixed;
-	inset: 0;
-	background: rgba(0,0,0,0.85);
-	z-index: 1000;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    background-color: rgba(0, 0, 0, 0.85);
+    z-index: 1000;
 }
 
 #PlateLid {
-	position: relative;
-	width: 80vw;
-	max-width: 350px;
-	aspect-ratio: 1;
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-#PlateLid > img:first-child { width: 100%; height: 100%; }
+.plate-img {
+    width: 100%;
+    height: 100%;
+}
 
 .LacBC {
-	position: absolute;
-	width: 25%;
-	aspect-ratio: 1;
-	border-radius: 10px;
-	background: #fff;
-	top: calc(20% * var(--indexT));
-	left: calc(18% * var(--indexL));
-	box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+    position: absolute;
+    width: 18%; /* Kích thước xúc xắc % theo đĩa */
+    height: 18%;
+    background-color: transparent;
+    border-radius: 50%;
+    /* Tính toán vị trí dựa trên biến CSS */
+    top: calc(15% * var(--indexT) + 10%);
+    left: calc(18% * var(--indexL) + 5%);
+    object-fit: contain;
 }
 
 #Lid, #LidIn {
-	position: absolute;
-	width: 80vw;
-	max-width: 350px;
-	aspect-ratio: 1;
+    width: 310px;
+    height: 310px;
+    position: absolute;
 }
 
-#Lid { animation: moveLid 1s linear; }
-@keyframes moveLid { from { left: 120%; } to { left: 0; } }
+#Lid {
+    /* Animation mặc định ẩn */
+}
 
-.shake { animation: shake 0.5s infinite; }
-@keyframes shake {
-	0% { transform: translate(2px, 2px) rotate(0deg); }
-	50% { transform: translate(-2px, 2px) rotate(-2deg); }
-	100% { transform: translate(2px, -2px) rotate(2deg); }
+@keyframes moveLid {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-200px); opacity: 0; }
 }
 
 #closeShake {
-	margin-top: 30px;
-	padding: 10px 30px;
-	background: #FFD700;
-	color: #d32f2f;
-	border: none;
-	font-size: 18px;
-	border-radius: 8px;
-	font-weight: bold;
-	cursor: pointer;
-}
-
-/* --- SHOP & NOTIFICATIONS --- */
-#shopPopup {
-	background: rgba(20, 20, 30, 0.98);
-	padding-top: 60px;
-}
-
-#closeShop {
-	position: fixed;
-	top: 15px;
-	right: 15px;
-	background: #ff5252;
-	width: 40px;
-	height: 40px;
-	border: none;
-	border-radius: 50%;
-	color: white;
-	font-weight: bold;
-	font-size: 20px;
-	z-index: 2000;
-}
-
-.shop-items {
-	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-	gap: 15px;
-	padding: 10px;
-	max-width: 800px;
-	margin: 0 auto;
-}
-
-.shop-item {
-	background: rgba(255,255,255,0.1);
-	border: 1px solid rgba(255,255,255,0.2);
-	border-radius: 10px;
-	padding: 15px;
-	color: white;
-	text-align: center;
-}
-
-.shop-item button {
-	width: 100%;
-	margin-top: 10px;
-	background: #00e676;
-	color: #000;
-	border: none;
-	padding: 8px;
-	border-radius: 5px;
-}
-
-/* Notification Popup */
-#notificationPopup {
-	position: fixed;
-	top: 50%;
-	left: 50%;
-	transform: translate(-50%, -50%);
-	background: white;
-	padding: 20px;
-	border-radius: 15px;
-	z-index: 3000;
-	box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-	text-align: center;
-	width: 90vw;
-	max-width: 400px;
-}
-#notificationPopup.win { background: #e8f5e9; border: 2px solid #4caf50; color: #2e7d32; }
-#notificationPopup.lose { background: #ffebee; border: 2px solid #e53935; color: #c62828; }
-
-#ShowBet {
-	position: fixed;
-	inset: 0;
-	background: rgba(0,0,0,0.9);
-	z-index: 2000;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-	align-items: center;
-	color: white;
-}
-
-/* --- RESPONSIVE MEDIA QUERIES --- */
-@media screen and (max-width: 600px) {
-	header { padding: 10px 5px; }
-	.header-content { flex-direction: row; gap: 10px; }
-	.logo-img { width: 50px; height: 50px; border-width: 2px; }
-	header h1 { font-size: 22px; }
-	
-	#FunctionBTN { display: none; } /* Ẩn nút chức năng trên header */
-	#more { display: block; } /* Hiện nút hamburger */
-	
-	.decor-cat { display: none; } /* Ẩn mèo để gọn màn hình */
-	
-	#Money { grid-template-columns: repeat(4, 1fr); }
-	
-	.shop-items { grid-template-columns: repeat(2, 1fr); }
-}
-
-@media screen and (max-width: 380px) {
-	#Money { grid-template-columns: repeat(3, 1fr); }
-	#SanDau { gap: 5px; }
-}
-/* Hiệu ứng tiền bay */
-.money-notify {
-    position: fixed;
-    font-size: 24px;
+    margin-top: 20px;
+    font-size: 20px;
+    border-radius: 5px;
+    color: white;
+    background-color: crimson;
+    border: none;
+    padding: 10px 40px;
     font-weight: bold;
-    pointer-events: none;
-    animation: floatUp 1.5s ease-out forwards;
-    z-index: 9999;
-    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
-                 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
+    cursor: pointer;
 }
 
-.money-minus {
-    color: #ff4d4d; /* Màu đỏ nhạt cho dễ nhìn trên nền tối */
+/* --- BUTTON LẮC --- */
+#submit {
+    width: 80%;
+    max-width: 300px;
+    background-color: red;
+    margin: 20px auto;
+    box-shadow: 0 5px #999;
+    color: white;
+    font-size: 24px;
+    padding: 15px;
+    cursor: pointer;
+    border-radius: 15px;
+    border: none;
 }
 
-.money-plus {
-    color: #ffd700; /* Màu vàng kim loại */
-    font-size: 30px; /* Thắng thì chữ to hơn chút cho sướng */
+#submit:active {
+    box-shadow: 0 2px #666;
+    transform: translateY(4px);
 }
 
-@keyframes floatUp {
-    0% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
+.block {
+    opacity: 0.6;
+    cursor: not-allowed !important;
+}
+
+/* --- TIỀN CƯỢC --- */
+#Money {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    overflow-x: auto;
+    width: 100%;
+    max-width: 100vw;
+    scroll-behavior: smooth;
+}
+
+#Money::-webkit-scrollbar {
+    height: 5px;
+}
+
+#Money::-webkit-scrollbar-thumb {
+    background: red;
+    border-radius: 10px;
+}
+
+#Money img {
+    height: 60px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border-radius: 50%;
+    border: 2px solid transparent;
+}
+
+.ChipsActive {
+    border-color: yellow !important;
+    transform: scale(1.1);
+    box-shadow: 0 0 10px gold;
+}
+
+/* --- CHI TIẾT CƯỢC POPUP --- */
+#ShowBet {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0,0,0,0.95);
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#ShowBet p {
+    font-size: 1.5rem;
+    color: white;
+    margin: 5px 0;
+}
+
+#close_detailBet {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: red;
+    color: white;
+    border: none;
+    font-size: 1.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* --- ANIMATION SHAKE --- */
+.shake {
+    animation: shake 0.5s infinite;
+}
+
+@keyframes shake {
+    0% { transform: translate(1px, 1px) rotate(0deg); }
+    10% { transform: translate(-1px, -2px) rotate(-1deg); }
+    20% { transform: translate(-3px, 0px) rotate(1deg); }
+    30% { transform: translate(3px, 2px) rotate(0deg); }
+    40% { transform: translate(1px, -1px) rotate(1deg); }
+    50% { transform: translate(-1px, 2px) rotate(-1deg); }
+    60% { transform: translate(-3px, 1px) rotate(0deg); }
+    70% { transform: translate(3px, 1px) rotate(-1deg); }
+    80% { transform: translate(-1px, -1px) rotate(1deg); }
+    90% { transform: translate(1px, 2px) rotate(0deg); }
+    100% { transform: translate(1px, -2px) rotate(-1deg); }
+}
+
+/* --- RESPONSIVE / MEDIA QUERIES --- */
+
+/* Tablet & Mobile */
+@media screen and (max-width: 768px) {
+    .header-logo {
+        position: relative; /* Đưa logo về giữa */
+        left: auto;
+        top: auto;
     }
-    100% {
-        opacity: 0;
-        transform: translateY(-50px) scale(1.2);
+    
+    .deco-cat {
+        display: none; /* Ẩn mèo để thoáng màn hình */
+    }
+
+    #FunctionBTN {
+        display: none; /* Ẩn nút chức năng trên header */
+    }
+
+    #more {
+        display: block; /* Hiện nút menu hamburger */
+    }
+    
+    #SanDau {
+        gap: 5px;
+        padding: 5px;
+    }
+    
+    #PlateLid, #Lid, #LidIn {
+        width: 250px; /* Thu nhỏ đĩa xóc */
+        height: 250px;
+    }
+}
+
+/* Mobile nhỏ */
+@media screen and (max-width: 400px) {
+    .header-content h1 {
+        font-size: 1.5rem;
+    }
+    .header-content p {
+        font-size: 1.2rem;
+    }
+    #Money img {
+        height: 50px;
     }
 }
