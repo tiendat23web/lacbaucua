@@ -26,6 +26,11 @@ var ResultBet = ["Cua", "Cua", "Cua"];
 var ChipNow = PriceChip[0];
 var CanSub = true;
 
+// --- BIẾN MỚI: THEO DÕI CHUỖI THẮNG ---
+var consecutiveWins = 0; 
+const RICH_THRESHOLD = 5000000; // Mốc giàu: 5 triệu thì bắt đầu ép thua
+const STREAK_THRESHOLD = 3;     // Mốc hên: Thắng 3 ván liên tiếp thì ép thua ván sau
+
 // --- XỬ LÝ COOKIE & TIỀN ---
 function setCookie(cname, cvalue, exdays = 365) {
     const d = new Date();
@@ -54,7 +59,7 @@ function checkCookie() {
     if (money != "") {
         Balance = parseInt(money);
     } else {
-        Balance = 500000; // Tiền mặc định cho người mới
+        Balance = 4000000; // Tiền mặc định cho người mới
     }
     ChangeBalance();
 };
@@ -75,11 +80,10 @@ function showFloatingMoney(amount, x, y) {
         el.textContent = "-" + ConvertMoney(Math.abs(amount));
     }
 
-    // Nếu không truyền tọa độ (ví dụ khi thắng tiền), hiện ở giữa màn hình
     if (x === undefined || y === undefined) {
         el.style.left = "50%";
         el.style.top = "40%";
-        el.style.transform = "translate(-50%, -50%)"; // Căn giữa chuẩn
+        el.style.transform = "translate(-50%, -50%)"; 
     } else {
         el.style.left = x + "px";
         el.style.top = y + "px";
@@ -87,7 +91,6 @@ function showFloatingMoney(amount, x, y) {
 
     document.body.appendChild(el);
 
-    // Xóa element sau khi animation xong (1.5s)
     setTimeout(() => {
         el.remove();
     }, 1500);
@@ -96,16 +99,12 @@ function showFloatingMoney(amount, x, y) {
 // --- XỬ LÝ NÚT LẮC ---
 submit.addEventListener("click", () => {
     if (CanSub) {
-        // Kiểm tra xem có ai đặt cược chưa, nếu chưa đặt thì cảnh báo nhẹ (tuỳ chọn)
-        // let totalBet = ValueBC.reduce((a, b) => a + b, 0);
-        
         CanSub = false;
         closeShake.style.display = "none";
         Audio.load();
         submit.classList.add("block");
         PlateLidPlace.style.display = "flex";
         
-        // Reset nắp
         Lid.style.animation = "none"; 
         Lid.style.transform = "translateX(0)";
         Lid.style.opacity = "1";
@@ -113,7 +112,7 @@ submit.addEventListener("click", () => {
         setTimeout(() => {
             Audio.play();
             PlateLid.classList.add("shake");
-            RandomBauCua(); // Chạy hàm xử lý kết quả (đã chỉnh sửa)
+            RandomBauCua(); // Chạy hàm xử lý kết quả
             LidIn.style.display = "initial";
             Lid.style.display = "none";
         }, 500); 
@@ -140,21 +139,22 @@ closeShake.addEventListener("click", () => {
     };
 });
 
-// --- HÀM XỬ LÝ KẾT QUẢ (THUẬT TOÁN NHÀ CÁI THẮNG) ---
+// --- HÀM XỬ LÝ KẾT QUẢ (LOGIC MỚI) ---
 function RandomBauCua() {
     let finalIndices = [0, 0, 0];
-    let minLossForHouse = Infinity; 
     let totalBetOnTable = ValueBC.reduce((a, b) => a + b, 0);
 
-    // Nếu không ai cược thì random thật
-    if (totalBetOnTable === 0) {
-        finalIndices = [
-            Math.floor(Math.random() * 6),
-            Math.floor(Math.random() * 6),
-            Math.floor(Math.random() * 6)
-        ];
-    } else {
-        // Thuật toán: Quay thử 50 lần, chọn kết quả nào Admin trả ít tiền nhất
+    // KIỂM TRA ĐIỀU KIỆN ĐỂ "ÉP THUA"
+    // 1. Nếu có đặt cược
+    // 2. VÀ (Tài sản > 5 triệu HOẶC Đã thắng liên tiếp 3 ván)
+    let shouldRigged = totalBetOnTable > 0 && (Balance >= RICH_THRESHOLD || consecutiveWins >= STREAK_THRESHOLD);
+
+    if (shouldRigged) {
+        // --- CHẾ ĐỘ KHÓ (ADMIN ĐỠ TIỀN) ---
+        // console.log("Kích hoạt chế độ khó: Giàu hoặc đang đỏ");
+        let minLossForHouse = Infinity; 
+        
+        // Quay thử 50 lần tìm kết quả người chơi thua nhiều nhất
         for (let k = 0; k < 50; k++) {
             let r1 = Math.floor(Math.random() * 6);
             let r2 = Math.floor(Math.random() * 6);
@@ -174,8 +174,17 @@ function RandomBauCua() {
                 minLossForHouse = currentPayout;
                 finalIndices = [r1, r2, r3];
             }
-            if (currentPayout === 0) break; 
+            if (currentPayout === 0) break; // Ăn trọn thì dừng luôn
         }
+
+    } else {
+        // --- CHẾ ĐỘ DỄ (NGẪU NHIÊN 100%) ---
+        // console.log("Chế độ xanh chín");
+        finalIndices = [
+            Math.floor(Math.random() * 6),
+            Math.floor(Math.random() * 6),
+            Math.floor(Math.random() * 6)
+        ];
     }
     
     // Áp dụng kết quả hình ảnh
@@ -191,56 +200,56 @@ function RandomBauCua() {
         LidIn.style.display = "none";
         Lid.style.display = "initial";
         
-        // Hiệu ứng mở nắp
         Lid.style.animation = "moveLid 1s forwards";
 
         closeShake.style.display = "initial";
         
         let totalWinMoney = 0;
+        let isWinningRound = false;
 
-        // Hoàn tiền vốn + tiền thắng
-        // Cách tính cũ của bạn: Cộng từng con, nếu trúng thì cộng thêm.
-        // Logic chuẩn: Nếu trúng, trả lại vốn + tiền thắng. 
-        // Code cũ của bạn đang cộng dồn vào Balance nên ta giữ nguyên logic hiển thị.
-        
-        // 1. Cộng tiền trúng
+        // Tính toán tiền thắng/thua
         for (var i = 0; i < ResultBet.length; i++) {
             let indexWin = NameBC.indexOf(ResultBet[i]);
             if (ValueBC[indexWin] > 0) {
-                Balance += ValueBC[indexWin]; // Cộng tiền thắng (theo tỉ lệ 1:1 mỗi con)
+                Balance += ValueBC[indexWin]; // Cộng tiền thắng
                 totalWinMoney += ValueBC[indexWin];
+                isWinningRound = true;
             }
         }
         
-        // 2. Hoàn lại vốn cho những ô trúng
-        // Duyệt qua các ô đã đặt, nếu ô đó có trong kết quả thì hoàn vốn
         for (var i = 0; i < ValueBC.length; i++) {
             if (ValueBC[i] > 0 && ResultBet.includes(NameBC[i])) {
                 Balance += ValueBC[i]; // Hoàn vốn
                 totalWinMoney += ValueBC[i];
             }
-            
-            // Reset tiền cược trên bàn
             ValueBC[i] = 0;
             $("#BetNowBC" + i).textContent = NameBC[i] + ": 0$";
         }
 
+        // CẬP NHẬT CHUỖI THẮNG LIÊN TIẾP
+        if (totalWinMoney > totalBetOnTable) { // Nếu lời (Tiền về > Tiền cược)
+            consecutiveWins++;
+            // console.log("Chuỗi thắng: " + consecutiveWins);
+        } else {
+            consecutiveWins = 0; // Thua hoặc hòa thì reset chuỗi
+            // console.log("Reset chuỗi thắng");
+        }
+
         ChangeBalance();
 
-        // HIỆN THÔNG BÁO THẮNG LỚN (Nếu có ăn tiền)
+        // HIỆN THÔNG BÁO
         if (totalWinMoney > 0) {
             setTimeout(() => {
-                showFloatingMoney(totalWinMoney); // Hiện giữa màn hình
+                showFloatingMoney(totalWinMoney);
                 Swal.fire({
                     icon: 'success',
                     title: 'Chúc Mừng!',
-                    text: 'Bạn đã thắng: ' + ConvertMoney(totalWinMoney) + '$',
+                    text: 'Bạn đã ăn: ' + ConvertMoney(totalWinMoney) + 'VNĐ',
                     timer: 2000,
                     showConfirmButton: false
                 });
             }, 500);
         } else if (totalBetOnTable > 0) {
-            // Nếu có đặt mà thua trắng
              Swal.fire({
                 icon: 'error',
                 title: 'Thua Rồi!',
@@ -262,24 +271,19 @@ Chips.forEach((item, index) => {
     };
 });
 
-// --- ĐẶT CƯỢC (ĐÃ SỬA RESPONSIVE + THÔNG BÁO TRỪ TIỀN) ---
+// --- ĐẶT CƯỢC ---
 ChooseBC.forEach((item, index) => {
-    item.onclick = function(e) { // Thêm tham số e (event) để lấy toạ độ chuột
+    item.onclick = function(e) {
         if (ChipNow <= Balance) {
-            // Tính toán vị trí chip ngẫu nhiên trong ô (Responsive)
             let boxSize = item.offsetWidth;
             let coordT = Math.floor(Math.random() * (boxSize - 40)); 
             let coordL = Math.floor(Math.random() * (boxSize - 40));
             
-            // Trừ tiền
             Balance -= ChipNow;
             
-            // Hiện thông báo trừ tiền ngay tại chỗ click chuột
-            // Dùng e.clientX và e.clientY để lấy vị trí ngón tay/chuột
             let mouseX = e.clientX || e.pageX;
             let mouseY = e.clientY || e.pageY;
             
-            // Fix lỗi trên mobile đôi khi touch không ra clientX chuẩn, fallback về giữa ô
             if (!mouseX) {
                 let rect = item.getBoundingClientRect();
                 mouseX = rect.left + rect.width / 2;
@@ -288,11 +292,10 @@ ChooseBC.forEach((item, index) => {
 
             showFloatingMoney(-ChipNow, mouseX, mouseY);
 
-            // Thêm hình chip vào bàn
             item.insertAdjacentHTML("beforeend", `<img class='chipBet' style='top:${coordT}px; left:${coordL}px;' src='Chips/Chip${ChipNow}.png'>`)
             
             ValueBC[index] += ChipNow;
-            $("#BetNowBC" + index).textContent = NameBC[index] + ": " + ConvertMoney(ValueBC[index]) + "$";
+            $("#BetNowBC" + index).textContent = NameBC[index] + ": " + ConvertMoney(ValueBC[index]) + "VNĐ";
             ChangeBalance();
         } else {
             Swal.fire(
