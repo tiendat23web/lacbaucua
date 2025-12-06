@@ -1,0 +1,453 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+	user-select: none;
+	outline: none;
+	-webkit-tap-highlight-color: transparent; /* Bỏ highlight khi chạm trên mobile */
+}
+
+body {
+	overflow-x: hidden;
+	font-family: "Arial", sans-serif;
+	font-weight: bold;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+	min-height: 100vh;
+	padding-bottom: 20px;
+}
+
+/* --- HEADER --- */
+header {
+	background-color: #d32f2f;
+	color: white;
+	width: 100%;
+	padding: 15px;
+	box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.header-content {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	max-width: 800px;
+	gap: 20px;
+}
+
+.logo-img {
+	width: clamp(60px, 15vw, 100px);
+	height: clamp(60px, 15vw, 100px);
+	border-radius: 50%;
+	border: 3px solid #FFD700;
+}
+
+.header-text {
+	text-align: left;
+}
+
+header h1 {
+	text-transform: uppercase;
+	font-size: clamp(20px, 5vw, 36px);
+	margin: 5px 0;
+	color: #fff;
+	text-shadow: 2px 2px 0px #000;
+}
+
+header h2, header h3 {
+	font-size: clamp(12px, 3.5vw, 18px);
+	margin: 2px 0;
+	opacity: 0.9;
+}
+
+header p {
+	font-size: clamp(16px, 4.5vw, 24px);
+	color: #FFD700;
+	margin-top: 5px;
+	font-family: monospace;
+	background: rgba(0,0,0,0.3);
+	padding: 5px 10px;
+	border-radius: 5px;
+	display: inline-block;
+}
+
+/* --- BUTTONS --- */
+#FunctionBTN {
+	display: flex;
+	gap: 10px;
+	margin-top: 15px;
+	flex-wrap: wrap;
+	justify-content: center;
+}
+
+button {
+	font-family: inherit;
+	transition: transform 0.1s;
+}
+
+button:active {
+	transform: scale(0.95);
+}
+
+.detailBet, .resetMoney, .shopBtn {
+	padding: 8px 16px;
+	border: none;
+	border-radius: 8px;
+	font-size: clamp(13px, 3vw, 16px);
+	cursor: pointer;
+	font-weight: bold;
+	color: white;
+	box-shadow: 0 4px 0 rgba(0,0,0,0.2);
+}
+
+.detailBet { background-color: #009688; }
+.resetMoney { background-color: #ffca28; color: #d32f2f; }
+.shopBtn { background: linear-gradient(135deg, #4facfe, #00f2fe); }
+
+/* --- MENU MOBILE --- */
+#more {
+	position: absolute;
+	top: 10px;
+	right: 10px;
+	background: none;
+	border: none;
+	color: white;
+	font-size: 32px;
+	cursor: pointer;
+	display: none;
+	z-index: 100;
+}
+
+#FunctionBTN_mb {
+	display: none;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.9);
+	z-index: 2000;
+}
+
+.mb-btn {
+	width: 80%;
+	padding: 15px;
+	margin: 10px 0;
+	font-size: 18px;
+}
+
+#closeFN_mb {
+	position: absolute;
+	top: 20px;
+	right: 20px;
+	font-size: 40px;
+	background: none;
+	border: none;
+	color: white;
+	cursor: pointer;
+}
+
+/* --- GAME AREA --- */
+.main-game-area {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	margin-top: 20px;
+	gap: 10px;
+}
+
+.decor-cat {
+	width: clamp(80px, 20vw, 150px);
+	height: auto;
+}
+
+#SanDau {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 8px;
+	padding: 10px;
+	background: rgba(255,255,255,0.2);
+	border: 3px solid #d32f2f;
+	border-radius: 15px;
+	max-width: 500px;
+	width: 95vw;
+}
+
+.ChooseBC {
+	position: relative;
+	width: 100%;
+	aspect-ratio: 1;
+	background: #fff;
+	border-radius: 10px;
+	cursor: pointer;
+	border: 2px solid transparent;
+	overflow: hidden;
+}
+
+.ChooseBC:active {
+	border-color: #FFD700;
+	background: #fff8e1;
+}
+
+.BauCuaChoose {
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	padding: 2px;
+}
+
+/* Chips logic */
+.chipBet {
+	position: absolute;
+	width: 30%;
+	top: var(--randomIndexT);
+	left: var(--randomIndexL);
+	pointer-events: none;
+	filter: drop-shadow(0 2px 2px rgba(0,0,0,0.5));
+}
+
+/* --- MONEY CHIPS BAR --- */
+#Money {
+	display: grid;
+	grid-template-columns: repeat(6, 1fr);
+	gap: 8px;
+	padding: 10px;
+	background: rgba(0,0,0,0.2);
+	border-radius: 15px;
+	margin: 10px auto;
+	width: 95vw;
+	max-width: 600px;
+}
+
+.ChipsCoin {
+	width: 100%;
+	cursor: pointer;
+	border-radius: 50%;
+	border: 2px solid transparent;
+	transition: transform 0.2s;
+}
+
+.ChipsActive {
+	border-color: #FFD700;
+	transform: scale(1.15);
+	box-shadow: 0 0 10px #FFD700;
+}
+
+/* --- SHAKE BUTTON --- */
+#submit {
+	width: 80%;
+	max-width: 300px;
+	background: #d32f2f;
+	color: white;
+	font-size: 20px;
+	padding: 12px;
+	border: none;
+	border-radius: 30px;
+	box-shadow: 0 6px #b71c1c;
+	margin: 10px 0;
+	cursor: pointer;
+}
+
+#submit:active {
+	box-shadow: 0 2px #b71c1c;
+	transform: translateY(4px);
+}
+
+/* --- SHAKING ANIMATION OVERLAY --- */
+#PlateLidPlace {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.85);
+	z-index: 1000;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+#PlateLid {
+	position: relative;
+	width: 80vw;
+	max-width: 350px;
+	aspect-ratio: 1;
+}
+
+#PlateLid > img:first-child { width: 100%; height: 100%; }
+
+.LacBC {
+	position: absolute;
+	width: 25%;
+	aspect-ratio: 1;
+	border-radius: 10px;
+	background: #fff;
+	top: calc(20% * var(--indexT));
+	left: calc(18% * var(--indexL));
+	box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+}
+
+#Lid, #LidIn {
+	position: absolute;
+	width: 80vw;
+	max-width: 350px;
+	aspect-ratio: 1;
+}
+
+#Lid { animation: moveLid 1s linear; }
+@keyframes moveLid { from { left: 120%; } to { left: 0; } }
+
+.shake { animation: shake 0.5s infinite; }
+@keyframes shake {
+	0% { transform: translate(2px, 2px) rotate(0deg); }
+	50% { transform: translate(-2px, 2px) rotate(-2deg); }
+	100% { transform: translate(2px, -2px) rotate(2deg); }
+}
+
+#closeShake {
+	margin-top: 30px;
+	padding: 10px 30px;
+	background: #FFD700;
+	color: #d32f2f;
+	border: none;
+	font-size: 18px;
+	border-radius: 8px;
+	font-weight: bold;
+	cursor: pointer;
+}
+
+/* --- SHOP & NOTIFICATIONS --- */
+#shopPopup {
+	background: rgba(20, 20, 30, 0.98);
+	padding-top: 60px;
+}
+
+#closeShop {
+	position: fixed;
+	top: 15px;
+	right: 15px;
+	background: #ff5252;
+	width: 40px;
+	height: 40px;
+	border: none;
+	border-radius: 50%;
+	color: white;
+	font-weight: bold;
+	font-size: 20px;
+	z-index: 2000;
+}
+
+.shop-items {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+	gap: 15px;
+	padding: 10px;
+	max-width: 800px;
+	margin: 0 auto;
+}
+
+.shop-item {
+	background: rgba(255,255,255,0.1);
+	border: 1px solid rgba(255,255,255,0.2);
+	border-radius: 10px;
+	padding: 15px;
+	color: white;
+	text-align: center;
+}
+
+.shop-item button {
+	width: 100%;
+	margin-top: 10px;
+	background: #00e676;
+	color: #000;
+	border: none;
+	padding: 8px;
+	border-radius: 5px;
+}
+
+/* Notification Popup */
+#notificationPopup {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background: white;
+	padding: 20px;
+	border-radius: 15px;
+	z-index: 3000;
+	box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+	text-align: center;
+	width: 90vw;
+	max-width: 400px;
+}
+#notificationPopup.win { background: #e8f5e9; border: 2px solid #4caf50; color: #2e7d32; }
+#notificationPopup.lose { background: #ffebee; border: 2px solid #e53935; color: #c62828; }
+
+#ShowBet {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.9);
+	z-index: 2000;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	color: white;
+}
+
+/* --- RESPONSIVE MEDIA QUERIES --- */
+@media screen and (max-width: 600px) {
+	header { padding: 10px 5px; }
+	.header-content { flex-direction: row; gap: 10px; }
+	.logo-img { width: 50px; height: 50px; border-width: 2px; }
+	header h1 { font-size: 22px; }
+	
+	#FunctionBTN { display: none; } /* Ẩn nút chức năng trên header */
+	#more { display: block; } /* Hiện nút hamburger */
+	
+	.decor-cat { display: none; } /* Ẩn mèo để gọn màn hình */
+	
+	#Money { grid-template-columns: repeat(4, 1fr); }
+	
+	.shop-items { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media screen and (max-width: 380px) {
+	#Money { grid-template-columns: repeat(3, 1fr); }
+	#SanDau { gap: 5px; }
+}
+/* Hiệu ứng tiền bay */
+.money-notify {
+    position: fixed;
+    font-size: 24px;
+    font-weight: bold;
+    pointer-events: none;
+    animation: floatUp 1.5s ease-out forwards;
+    z-index: 9999;
+    text-shadow: 2px 0 #000, -2px 0 #000, 0 2px #000, 0 -2px #000,
+                 1px 1px #000, -1px -1px #000, 1px -1px #000, -1px 1px #000;
+}
+
+.money-minus {
+    color: #ff4d4d; /* Màu đỏ nhạt cho dễ nhìn trên nền tối */
+}
+
+.money-plus {
+    color: #ffd700; /* Màu vàng kim loại */
+    font-size: 30px; /* Thắng thì chữ to hơn chút cho sướng */
+}
+
+@keyframes floatUp {
+    0% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+    100% {
+        opacity: 0;
+        transform: translateY(-50px) scale(1.2);
+    }
+}
